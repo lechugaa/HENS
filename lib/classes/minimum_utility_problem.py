@@ -65,15 +65,11 @@ class Min_Utility_Problem:
         process_streams = streams + utilities
         for process_stream in process_streams:
             Tin = process_stream.Tin
-            Tout = process_stream.Tout
             if not process_stream.is_hot:
                 Tin += self.DTmin
-                Tout += self.DTmin
-            
             if Tin not in self.temperatures:
                 self.temperatures.append(Tin)
-            if Tout not in self.temperatures:
-                self.temperatures.append(Tout)
+            
         self.temperatures.sort(reverse = True)
 
         # creating intervals
@@ -88,7 +84,7 @@ class Min_Utility_Problem:
             # initializing sigmas
             for hot_stream in self.HS:
                 if hot_stream.interval.passes_through_interval(interval):
-                    self.sigmas[(hot_stream, interval)] = interval.DT * hot_stream.FCp
+                    self.sigmas[(hot_stream, interval)] = Temperature_Interval.common_interval(interval, hot_stream.interval).DT * hot_stream.FCp
                 else:
                     self.sigmas[(hot_stream, interval)] = 0
 
@@ -96,7 +92,7 @@ class Min_Utility_Problem:
             # by adding DTmin to each CS interval, but CS intervals were nos modified    
             for cold_stream in self.CS:
                 if cold_stream.interval.shifted(self.DTmin).passes_through_interval(interval):
-                    self.deltas[(cold_stream, interval)] = interval.DT * cold_stream.FCp
+                    self.deltas[(cold_stream, interval)] = Temperature_Interval.common_interval(interval, cold_stream.interval.shifted(self.DTmin)).DT * cold_stream.FCp
                 else:
                     self.deltas[(cold_stream, interval)] = 0
 
