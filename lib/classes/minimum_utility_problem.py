@@ -123,3 +123,20 @@ class Min_Utility_Problem:
     
     def __repr__(self):
         return self.__str__()
+
+
+    @staticmethod
+    def generate_from_data(data_id):
+        
+        path = 'data/original_problems/' + data_id + '.dat'
+        f = open(path, 'r')
+        lines = f.readlines()
+        f.close()
+        
+        elements = [line.split() for line in lines]
+        DTmin = float(elements[3][1])
+        elements = elements[4:]
+        streams = [Stream(Tin = float(e[1]), Tout = float(e[2]), FCp = float(e[3])) for e in elements if e[0][1]!='U']
+        utilities = [Utility(Tin = float(e[1]),Tout = float(e[2]), cost = float(e[3])) for e in elements if e[0][1]=='U']
+
+        return Min_Utility_Problem(streams, utilities, DTmin)
