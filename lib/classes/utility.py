@@ -15,3 +15,7 @@ class Utility(Process_Stream):
 
     def __str__(self):
         return "Tin: {}, Tout: {}, Cost: {}".format(self.Tin, self.Tout, self.cost)
+
+    
+    def __repr__(self):
+        return self.__str__()
