@@ -21,11 +21,14 @@ class Min_Utility_Problem:
         self.intervals = []
         self.sigmas = {}
         self.deltas = {}
+        self.accepted_hu_sigmas = {}
+        self.accepted_cu_deltas = {}
         self.DTmin = DTmin
         self.__init_streams(streams)
         self.__init_utilities(utilities)
         self.__init_temperatures(streams, utilities)
         self.__init_heats()
+        self.__init_accepted_u_intervals()
 
 
     def __init_streams(self, streams):
@@ -96,8 +99,25 @@ class Min_Utility_Problem:
                     self.deltas[(cold_stream, interval)] = interval.DT * cold_stream.FCp
                 else:
                     self.deltas[(cold_stream, interval)] = 0
-                
-  
+
+    def __init_accepted_u_intervals(self):
+        for interval in self.intervals:
+            
+            # accepted sigmas
+            for hot_utility in self.HU:
+                if hot_utility.interval.passes_through_interval(interval):
+                    self.accepted_hu_sigmas[(hot_utility, interval)] = True
+                else:
+                    self.accepted_hu_sigmas[(hot_utility, interval)] = False
+
+            # accepted deltas
+            for cold_utility in self.CU:
+                if cold_utility.interval.shifted(self.DTmin).passes_through_interval(interval):
+                    self.accepted_cu_deltas[(cold_utility, interval)] = True
+                else:
+                    self.accepted_cu_deltas[(cold_utility, interval)] = False
+
+
     def __str__(self):
         return "HS: {} \nCS: {}\nHU: {}\nCU: {}\nDTmin: {}".format(
             len(self.HS), len(self.CS), 
