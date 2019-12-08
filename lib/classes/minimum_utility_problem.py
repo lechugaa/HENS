@@ -13,19 +13,18 @@ class Min_Utility_Problem:
 
 
     def __init__(self, streams, utilities, DTmin):
-
         self.HS = []
         self.CS = []
         self.HU = []
         self.CU = []
         self.temperatures = []
         self.intervals = []
+        self.sigmas = {}
+        self.deltas = {}
         self.DTmin = DTmin
         self.__init_streams(streams)
         self.__init_utilities(utilities)
         self.__init_temperatures(streams, utilities)
-        self.sigmas = [[0 for _ in range(len(self.intervals))] for _ in range(len(self.HS))]
-        self.deltas = [[0 for _ in range(len(self.intervals))] for _ in range(len(self.CS))]
         self.__init_heats()
 
 
@@ -81,26 +80,24 @@ class Min_Utility_Problem:
 
 
     def __init_heats(self):
-        # initializing sigmas
-        for stream_no in range(len(self.HS)):
-            for interval_no in range(len(self.intervals)):
-                stream = self.HS[stream_no]
-                interval = self.intervals[interval_no]
-                # checking if stream passes through interval
-                if stream.interval.passes_through_interval(interval):
-                    self.sigmas[stream_no][interval_no] = interval.DT * stream.FCp
+        for interval in self.intervals:
 
-        # initializing deltas. This one is tricky because intervals were constructed by adding
-        # DTmin to each CS interval, but CS intervals were nos modified
-        for stream_no in range(len(self.CS)):
-            for interval_no in range(len(self.intervals)):
-                stream = self.CS[stream_no]
-                interval = self.intervals[interval_no]
-                # checking if stream passes through interval
-                if stream.interval.shifted(self.DTmin).passes_through_interval(interval):
-                    self.deltas[stream_no][interval_no] = interval.DT * stream.FCp
+            # initializing sigmas
+            for hot_stream in self.HS:
+                if hot_stream.interval.passes_through_interval(interval):
+                    self.sigmas[(hot_stream, interval)] = interval.DT * hot_stream.FCp
+                else:
+                    self.sigmas[(hot_stream, interval)] = 0
 
-
+            # initializing deltas. This one is tricky because intervals were constructed 
+            # by adding DTmin to each CS interval, but CS intervals were nos modified    
+            for cold_stream in self.CS:
+                if cold_stream.interval.shifted(self.DTmin).passes_through_interval(interval):
+                    self.deltas[(cold_stream, interval)] = interval.DT * cold_stream.FCp
+                else:
+                    self.deltas[(cold_stream, interval)] = 0
+                
+  
     def __str__(self):
         return "HS: {} \nCS: {}\nHU: {}\nCU: {}\nDTmin: {}".format(
             len(self.HS), len(self.CS), 

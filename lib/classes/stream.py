@@ -16,3 +16,7 @@ class Stream(Process_Stream):
 
     def __str__(self):
         return "Tin: {}, Tout: {}, FCp: {}".format(self.Tin, self.Tout, self.FCp)
+
+    
+    def __repr__(self):
+        return self.__str__()

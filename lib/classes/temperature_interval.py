@@ -14,6 +14,10 @@ class Temperature_Interval:
     def __str__(self):
         return "[{}, {}]".format(self.Tmax, self.Tmin)
 
+    
+    def __repr__(self):
+        return self.__str__()
+
 
     def passes_through_interval(self, other):
         """
