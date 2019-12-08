@@ -1,0 +1,17 @@
+Test case originally investigated by "Chen, Grossmann, Miller. Computers and Chemical Engineering 82, p. 68-83, 2015". 
+Retrieved from www.minlp.org. 
+ 
+ DTmin 10.0
+HS0 400.0 120.0 1.0
+HS1 340.0 120.0 2.0
+HS2 380.0 150.0 1.5
+HS3 300.0 100.0 2.5
+HS4 420.0 160.0 1.7
+CS0 160.0 400.0 1.5
+CS1 100.0 250.0 1.3
+CS2 50.0 300.0 2.5
+CS3 200.0 380.0 2.8
+CS4 150.0 450.0 1.9
+HU0 500.0 499.0 80.0
+HU1 350.0 349.0 50.0
+CU0 20.0 21.0 20.0
