@@ -79,4 +79,19 @@ def solve_min_uility_instace(problem_instance):
     solver = SolverFactory("glpk")
     solver.solve(model)
     model.cost.pprint()
-    model.R.pprint()
+    
+    # generating sigmas dictionary for hot utilities
+    sigma_HU = {}
+    for utility in HU:
+        for interval in TI:
+            # ignore VS Code error: line works as intended
+            sigma_HU[utility, interval] = model.sigma_HU[utility, interval].value
+    
+    # generating deltas dictionary for cold utilities
+    delta_CU = {}
+    for utility in CU:
+        for interval in TI:
+            # ignore VS Code error: line works as intended
+            delta_CU[utility, interval] = model.delta_CU[utility, interval].value
+
+    return (sigma_HU, delta_CU)
