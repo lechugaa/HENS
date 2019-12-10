@@ -68,4 +68,6 @@ if __name__ == '__main__':
     # solving model
     solver = SolverFactory("glpk")
     solver.solve(model)
-    model.y.pprint()
+    y = [model.y[h, c].value for h in H for c in C]
+    print(sum(y))
+    model.q.pprint()
