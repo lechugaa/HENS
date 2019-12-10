@@ -14,7 +14,7 @@ if __name__ == '__main__':
     
     for problem in problems:
 
-        print("---------------------{}---------------------".format(problem))
+        print("-------------------------------{}-------------------------------".format(problem))
         minup = Min_Utility_Problem.generate_from_data(problem)
         (sigma_HU, delta_HU) = solve_min_utility_instace(minup)
         network = Network(minup, sigma_HU, delta_HU)

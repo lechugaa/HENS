@@ -1,6 +1,7 @@
 # Minimization of Matches Solver via Transshipment Model
 from pyomo.environ import ConcreteModel, Var, NonNegativeReals, RangeSet, Objective, Constraint, SolverFactory, Binary
 
+
 def solve_transshipment_model(network):
 
     # declaring model
@@ -54,6 +55,9 @@ def solve_transshipment_model(network):
 
     # solving model
     solver = SolverFactory("glpk")
-    solver.solve(model)
+    results = solver.solve(model)
     y = [model.y[h, c].value for h in H for c in C]
-    print(sum(y))
+    print("HS: {}, CS: {}, TI: {}".format(len(H), len(C), len(T)))
+    print("Objective: y = {}".format(sum(y)))
+    print(results)
+    model.y.pprint()
