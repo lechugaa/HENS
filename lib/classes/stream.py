@@ -12,11 +12,3 @@ class Stream(Process_Stream):
         Process_Stream.__init__(self, Tin, Tout)
         self.FCp = FCp
         self.heat = abs((Tout - Tin) * FCp)
-
-
-    def __str__(self):
-        return "Tin: {}, Tout: {}, FCp: {}".format(self.Tin, self.Tout, self.FCp)
-
-    
-    def __repr__(self):
-        return self.__str__()

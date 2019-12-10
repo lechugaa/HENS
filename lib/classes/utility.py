@@ -11,11 +11,3 @@ class Utility(Process_Stream):
     def __init__(self, Tin, Tout, cost):
         Process_Stream.__init__(self, Tin, Tout)
         self.cost = cost
-
-
-    def __str__(self):
-        return "Tin: {}, Tout: {}, Cost: {}".format(self.Tin, self.Tout, self.cost)
-
-    
-    def __repr__(self):
-        return self.__str__()
