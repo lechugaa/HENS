@@ -1,7 +1,7 @@
 # Minimization of Utility Solver
 from pyomo.environ import ConcreteModel, Var, NonNegativeReals, RangeSet, Objective, Constraint, SolverFactory
 
-def solve_min_uility_instace(problem_instance):
+def solve_min_utility_instace(problem_instance):
 
     # declaring model
     model = ConcreteModel(name = "MIN_UTILITY") # declaring concrete model
