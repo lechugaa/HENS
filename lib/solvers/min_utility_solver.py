@@ -78,7 +78,6 @@ def solve_min_uility_instace(problem_instance):
     # solving model
     solver = SolverFactory("glpk")
     solver.solve(model)
-    model.cost.pprint()
     
     # generating sigmas dictionary for hot utilities
     sigma_HU = {}
