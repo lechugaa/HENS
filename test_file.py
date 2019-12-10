@@ -9,11 +9,13 @@ from lib.classes.network import Network
 
 if __name__ == '__main__':
 
-    # problems = ["balanced5", "balanced8", "balanced10", "balanced12", "balanced15"]
-    # problems += ["unbalanced5", "unbalanced10", "unbalanced15", "unbalanced17", "unbalanced20"]
+    problems = ["balanced5", "balanced8", "balanced10", "balanced12", "balanced15"]
+    problems += ["unbalanced5", "unbalanced10", "unbalanced15", "unbalanced17", "unbalanced20"]
     
-    minup = Min_Utility_Problem.generate_from_data("balanced5")
-    (sigma_HU, delta_HU) = solve_min_utility_instace(minup)
-    network = Network(minup, sigma_HU, delta_HU)
-    solve_transshipment_model(network)
-    
+    for problem in problems:
+
+        print("---------------------{}---------------------".format(problem))
+        minup = Min_Utility_Problem.generate_from_data(problem)
+        (sigma_HU, delta_HU) = solve_min_utility_instace(minup)
+        network = Network(minup, sigma_HU, delta_HU)
+        solve_transshipment_model(network)
