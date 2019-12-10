@@ -1,0 +1,12 @@
+Test case originally investigated by "Furman, Sahinidis. Industrial and Engineering Chemistry Research 43(14), p. 3554-3565, 2004".
+Manually digitized and made publicly available by "Letsios, Kouyialis, Misener. Computers and Chemical Engineering 113, p. 57-85, 2018". 
+ 
+DTmin 10
+HS1  300 200 10
+HS2  200 190 100
+HS3  190 170 50
+CS1  160 180 50
+CS2  180 190 100
+CS3  190 230 25
+HU1  350 349  1
+CU1  30  50  1 
