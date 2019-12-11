@@ -1,11 +1,8 @@
 # This file tests the implementation of the classes
-from lib.classes.stream import Stream
-from lib.classes.utility import Utility
 from lib.classes.minimum_utility_problem import Min_Utility_Problem
 from lib.solvers.min_utility_solver import solve_min_utility_instace
-from lib.solvers.transshipment_solver import solve_transshipment_model
+from lib.solvers.transshipment_solver import solve_transshipment_model, solve_transshipment_model_greedy
 from lib.solvers.transport_solver import solve_transport_model
-from lib.solvers.greedy_minmax_delta import greedy_min_delta
 from lib.classes.network import Network
 
 
@@ -23,6 +20,8 @@ if __name__ == '__main__':
     minup = Min_Utility_Problem.generate_from_data(problem)
     (sigma_HU, delta_HU) = solve_min_utility_instace(minup)
     network = Network(minup, sigma_HU, delta_HU)
-    # solve_transshipment_model(network)
-    greedy_min_delta(network)
-    
+
+    print("-----------------------------------Normal-----------------------------------")
+    solve_transshipment_model(network)
+    print("-----------------------------------Greedy-----------------------------------")
+    solve_transshipment_model_greedy(network)
