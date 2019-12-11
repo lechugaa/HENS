@@ -5,7 +5,7 @@ from lib.classes.minimum_utility_problem import Min_Utility_Problem
 from lib.solvers.min_utility_solver import solve_min_utility_instace
 from lib.solvers.transshipment_solver import solve_transshipment_model
 from lib.solvers.transport_solver import solve_transport_model
-from lib.solvers.greedy_minmax_delta import max_heat
+from lib.solvers.greedy_minmax_delta import greedy_min_delta
 from lib.classes.network import Network
 
 
@@ -24,6 +24,5 @@ if __name__ == '__main__':
     (sigma_HU, delta_HU) = solve_min_utility_instace(minup)
     network = Network(minup, sigma_HU, delta_HU)
     # solve_transshipment_model(network)
-    q  = max_heat(network, network.H[0], network.C[0])
-    print(q)
+    greedy_min_delta(network)
     
