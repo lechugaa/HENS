@@ -15,6 +15,7 @@ from temperature_interval import Temperature_Interval
 from stream import Process_Stream
 from utility import Utility
 from minimum_utility_problem import Min_Utility_Problem
+from ..solvers.greedy_max_heat import greedy_heat
 
 
 class Network:
@@ -29,11 +30,13 @@ class Network:
         self.heats = {}   # hi
         self.demands = {} # cj
         self.U = {}
+        self.U_greedy = {}
         self.__update_sigmas(utility_sigmas)
         self.__update_deltas(utility_deltas)
         self.__init_heats()
         self.__init_demands()
         self.__init_U()
+        self.__init_U_greedy()
 
 
     def __update_sigmas(self, new_sigmas):
@@ -71,7 +74,13 @@ class Network:
         for hot_stream in self.H:
             for cold_stream in self.C:
                 self.U[(hot_stream, cold_stream)] = min(self.heats[hot_stream], self.demands[cold_stream])
+    
 
+    def __init_U_greedy(self):
+        for hot_stream in self.H:
+            for cold_stream in self.C:
+                self.U_greedy[(hot_stream, cold_stream)] = greedy_heat(self.T, hot_stream, cold_stream, self.sigmas, self.deltas)[0]
+                
 
     def __str__(self):
         return "H: {} \nC: {}".format(len(self.H), len(self.C))
