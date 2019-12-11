@@ -26,8 +26,8 @@ class Network:
         self.T = min_utility_instance.intervals
         self.sigmas = min_utility_instance.sigmas
         self.deltas = min_utility_instance.deltas
-        self.__heats = {}   # hi
-        self.__demands = {} # cj
+        self.heats = {}   # hi
+        self.demands = {} # cj
         self.U = {}
         self.__update_sigmas(utility_sigmas)
         self.__update_deltas(utility_deltas)
@@ -51,7 +51,7 @@ class Network:
             stream_heat = 0
             for interval in self.T:
                 stream_heat += self.sigmas[(hot_stream, interval)]
-            self.__heats[hot_stream] = stream_heat
+            self.heats[hot_stream] = stream_heat
 
 
     def __init_demands(self):
@@ -59,7 +59,7 @@ class Network:
             stream_demand = 0
             for interval in self.T:
                 stream_demand += self.deltas[cold_stream, interval]
-            self.__demands[cold_stream] = stream_demand
+            self.demands[cold_stream] = stream_demand
 
 
     def __init_U(self):
@@ -70,7 +70,7 @@ class Network:
         """
         for hot_stream in self.H:
             for cold_stream in self.C:
-                self.U[(hot_stream, cold_stream)] = min(self.__heats[hot_stream], self.__demands[cold_stream])
+                self.U[(hot_stream, cold_stream)] = min(self.heats[hot_stream], self.demands[cold_stream])
 
 
     def __str__(self):
