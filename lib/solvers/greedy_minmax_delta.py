@@ -11,6 +11,8 @@ chooses a match that minimizes max(hi - qmax, ci - qmax).
 """
 import sys
 from time import time
+from greedy_max_heat import greedy_heat, greedy_heat_2
+
 
 def greedy_min_delta(network):
     
@@ -23,87 +25,61 @@ def greedy_min_delta(network):
     demands = network.demands
 
     M = []
-    q = {}
     total_heat = sum(heats[hot_stream] for hot_stream in H)
-    total_demand = sum(demands[cold_stream] for cold_stream in C)
-
-    # termination criterion
-    remaining_heat = total_heat + total_demand
+    q = {}
 
     # Tolerance
     tolerance = 10**(-7)
 
     # Starting time
     starting_time = time()
+    n_iterations = 1
 
-    while remaining_heat > tolerance:
+    while total_heat > tolerance:
+        
+        print("Remaining heat in iteration {}: {}".format(n_iterations, total_heat))
+        n_iterations += 1
+        # if (n_iterations > 11):
+        #     break
 
-        matched_hs = None
-        matched_cs = None
-        matched_q = {}
         matched_heat = 0
-
-        minimum_delta = float(sys.maxint)
+        matched_h = None
+        matched_c = None
+        min_delta = float(sys.maxint)
+        matched_q = {}
 
         for h in H:
             for c in C:
                 if (h, c) not in M:
-                    (iteration_heat, iteration_q) = max_heat(network, h, c)
-                    iteration_delta = max(heats[h] - iteration_heat, demands[c] - iteration_heat)
+                    (itr_heat, itr_q) = greedy_heat_2(T, h, c, sigma, delta)
+                    itr_delta = max(heats[h] - itr_heat, demands[c] - itr_heat)
 
-                    if minimum_delta - iteration_delta > tolerance:
-                        matched_hs = h
-                        matched_cs = c
-                        matched_q = iteration_q
-                        matched_heat = 0
+                    if itr_delta - min_delta < tolerance:
+                        matched_h = h
+                        matched_c = c
+                        matched_heat = itr_heat
+                        matched_q = itr_q
+                        min_delta = itr_delta
 
-        M.append((matched_hs, matched_cs))
+        print(matched_heat)
+        total_heat -= matched_heat
+        q.update(matched_q)
+        M.append((matched_h, matched_c))
+
+    # ending time
+    ending_time = time()
+    elapsed_time = round(ending_time - starting_time, 3)
+    print(len(M))
+    print(M)
+    print(elapsed_time)
+
+    for match in M:
+        h = match[0]
+        c = match[1]
 
         for s in T:
             for t in T:
-                q[matched_hs, s, matched_cs, t] = matched_q[matched_hs, s, matched_cs, t]
-                heats[matched_hs] -= matched_q[matched_hs, s, matched_cs, t]
-                demands[matched_cs] -= matched_q[matched_hs, s, matched_cs, t]
-
-        total_heat = sum(heats[hot_stream] for hot_stream in H)
-        total_demand = sum(demands[cold_stream] for cold_stream in C)
-        remaining_heat = total_heat + total_demand
-
-        # ending time
-        ending_time = time()
-        elapsed_time = round(ending_time - starting_time, 3)
-        print(len(M))
-        print(elapsed_time)
-
-
-
-def max_heat(network, h, c):
-    T = network.T
-    sigma = network.sigmas
-    delta = network.deltas
-
-    q = {}      # dictionary of (hot_stream, t_interval, cold_stream, t_interval): double 
-    R = {}      # dictionary of t_interval: double
-    total_heat = 0
-    
-    for u in range(len(T) - 1): # first and last residual heat must be zero
-        t_intervals = T[:u]
-        R[T[u]] = sum(sigma[h, u] for u in t_intervals) - sum(delta[c, u] for u in t_intervals)
-    
-    for u in T:
-        q[h, u, c, u] = min(sigma[h, u], delta[c, u])
-        sigma[h, u] -= q[h, u, c, u]
-        delta[c, u] -= q[h, u, c, u]
-        total_heat += q[h, u, c, u]
-    
-    for s in range(len(T) - 1):
-        for t in range(s + 1, len(T)):
-            iteration_intervals = T[s:t] # revisar
-            q[h, T[s], c, T[t]] = min(sigma[h, T[s]], delta[c, T[t]], min(R[interval] for interval in iteration_intervals))
-            sigma[h, T[s]] -= q[h, T[s], c, T[t]]
-            delta[c,T[t]] -= q[h, T[s], c, T[t]]
-            for u in range(s, len(T) - 1):
-                R[T[u]] -= q[h, T[s], c, T[t]]
-            total_heat += q[h, T[s], c, T[t]]
-
-    return (total_heat, q)
+                heat = q.get((h, s, c, t))
+                if heat is None or heat == 0:
+                    continue
+                print("{} in {} to {} in {} -------------- {}".format(h, s, c, t, q[h, s, c, t]))
