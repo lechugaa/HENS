@@ -1,5 +1,6 @@
 # Minimization of Matches Solver via Transport Model
 from pyomo.environ import ConcreteModel, Var, NonNegativeReals, RangeSet, Objective, Constraint, SolverFactory, Binary
+from time import time
 
 def solve_transport_model(network):
 
@@ -49,13 +50,13 @@ def solve_transport_model(network):
     model.zero_heat_constraint = Constraint(H, C, T, T, rule = zero_heat_rule)
 
     # solving model
+    s_time = time()
     solver = SolverFactory("glpk")
     results = solver.solve(model)
     y = [model.y[h, c].value for h in H for c in C]
     print("HS: {}, CS: {}, TI: {}".format(len(H), len(C), len(T)))
-    print("Objective: y = {}".format(sum(y)))
-    print(results)
-    model.y.pprint()
+    print("Objective: y = {}, in {} seconds".format(sum(y), round(time() - s_time, 6)))
+    return results
 
 
 def solve_transport_model_greedy(network):
@@ -106,10 +107,10 @@ def solve_transport_model_greedy(network):
     model.zero_heat_constraint = Constraint(H, C, T, T, rule = zero_heat_rule)
 
     # solving model
+    s_time = time()
     solver = SolverFactory("glpk")
     results = solver.solve(model)
     y = [model.y[h, c].value for h in H for c in C]
     print("HS: {}, CS: {}, TI: {}".format(len(H), len(C), len(T)))
-    print("Objective: y = {}".format(sum(y)))
-    print(results)
-    model.y.pprint()
+    print("Objective: y = {}, in {} seconds".format(sum(y), round(time() - s_time, 6)))
+    return results

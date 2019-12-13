@@ -17,6 +17,8 @@ if __name__ == '__main__':
     problems += ["8sp-fs1", "8sp1", "9sp-al1", "9sp-has1", "10sp-la1", "10sp-ol1", "10sp1", "12sp1", "14sp1", "15sp-tkm"] 
     problems += ["20sp1", "22sp-ph", "22sp1", "23sp1", "28sp-as1", "37sp-yfyv"]
 
+    problems = ["balanced5"]
+
     for problem in problems:
         print("-----------------------------------{}-----------------------------------".format(problem))
         minup = Min_Utility_Problem.generate_from_data(problem)
